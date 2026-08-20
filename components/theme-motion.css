@@ -1,0 +1,144 @@
+.workbench {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.workbench::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0.74),
+      rgba(255, 255, 255, 0.34)
+    ),
+    url("/pastel-lake-bg.png") center/cover;
+  opacity: 0.2;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+.workbench::after {
+  content: "";
+  position: absolute;
+  inset: -16%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at var(--outer-x) var(--outer-y), color-mix(in oklch, var(--outer-from) 76%, white), transparent 38%),
+    radial-gradient(circle at calc(100% - var(--outer-x)) calc(100% - var(--outer-y)), color-mix(in oklch, var(--outer-to) 72%, white), transparent 44%);
+  filter: blur(var(--outer-softness)) saturate(var(--outer-saturation)) brightness(var(--outer-lightness));
+  opacity: var(--outer-opacity);
+  transition: filter 180ms ease-out, opacity 180ms ease-out;
+  animation: outer-drift 24s ease-in-out infinite alternate;
+  animation-play-state: var(--theme-motion, paused);
+}
+.workbench-head,
+.workbench-body {
+  position: relative;
+  z-index: 1;
+}
+.toolbar-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.tool-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 30px;
+  padding: 0 8px;
+  border: 1px solid #00000012;
+  border-radius: 8px;
+  background: #ffffffa8;
+  color: #4b4d53;
+  font-size: 10px;
+  cursor: pointer;
+  transition:
+    transform 150ms ease-out,
+    background 150ms ease-out;
+}
+.tool-button:active {
+  transform: scale(0.96);
+}
+.tool-button:hover {
+  background: #fff;
+}
+.tool-button.motion-toggle.on {
+  background: #263b3a;
+  color: #fff;
+}
+.window-controls i {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: none;
+}
+.window-controls .close {
+  background: #e77774;
+}
+.window-controls .minimize {
+  background: #edbb55;
+}
+.window-controls .zoom {
+  background: #54b761;
+}
+.note-window {
+  position: relative;
+  isolation: isolate;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+.note-window::before {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at var(--theme-x) var(--theme-y), color-mix(in oklch, var(--from) 82%, white), transparent 34%),
+    radial-gradient(circle at calc(100% - var(--theme-x)) calc(100% - var(--theme-y)), color-mix(in oklch, var(--to) 78%, white), transparent 38%),
+    radial-gradient(circle at 50% 50%, color-mix(in oklch, var(--from) 22%, var(--to)), transparent 58%);
+  filter: blur(var(--theme-blur)) saturate(var(--theme-saturation)) brightness(var(--theme-brightness));
+  opacity: var(--theme-opacity);
+  transform: translateZ(0);
+  will-change: transform;
+  transition: filter 180ms ease-out, opacity 180ms ease-out;
+  animation: theme-drift 18s ease-in-out infinite alternate;
+  animation-play-state: var(--theme-motion);
+}
+.note-sidebar,
+.chat-panel {
+  position: relative;
+  z-index: 1;
+}
+@keyframes theme-drift {
+  0% {
+    transform: translate3d(-3%, -2%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3%, 2%, 0) scale(1.04);
+  }
+  100% {
+    transform: translate3d(-1%, 4%, 0) scale(0.98);
+  }
+}
+@keyframes outer-drift {
+  0% { transform: translate3d(-2%, -1%, 0) scale(1); }
+  100% { transform: translate3d(2%, 2%, 0) scale(1.04); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .note-window::before {
+    animation: none !important;
+  }
+  .workbench::after {
+    animation: none !important;
+  }
+  .tool-button {
+    transition: none;
+  }
+}
